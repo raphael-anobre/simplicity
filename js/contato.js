@@ -4,6 +4,7 @@ const campoCep = formulario.querySelector("#cep");
 const campoEndereco = formulario.querySelector("#endereco");
 const campoBairro = formulario.querySelector("#bairro");
 const campoCidade = formulario.querySelector("#cidade");
+const campoEstado = formulario.querySelector("#estado");
 const status = formulario.querySelector("#status");
 const botaoLocalizar = formulario.querySelector("#localizar-cep");
 
@@ -13,8 +14,8 @@ botaoLocalizar.addEventListener("click", function (event) {
 
     // Pegar o cep digitado
     let cep = campoCep.value;
-     /* "AJAX": técnica de comunicação assíncrona
-     API (Web Service) ViaCEP */
+    /* "AJAX": técnica de comunicação assíncrona
+    API (Web Service) ViaCEP */
 
     /* Etapa 1: preparar uma URL contendo o cep
     digitadoe o caminho da API (ViaCEP) */
@@ -30,11 +31,24 @@ botaoLocalizar.addEventListener("click", function (event) {
         .then(resposta => resposta.json())
 
 
-    /* Etapa 4: ... e então, extraia os dados da resposta
-    e mostre na tela */
-    .then(dados => {
-        console.log(dados);
-    } )
+        /* Etapa 4: ... e então, extraia os dados da resposta
+        e mostre na tela */
+        .then(dados => {
+            console.log(dados);
+
+            if ("erro" in dados) {
+                // Apresentamos a mensagem abaixo
+                console.log("CEP não encontrado!");
+            } else {
+                // Senão, o cep existe então mostramos
+                console.log("CEP encontrado!");
+
+                campoEndereco.value = dados.logradouro;
+                campoBairro.value = dados.bairro;
+                campoCidade.value = dados.localidade;
+                campoEstado.value = dados.uf;
+            }
+        })
 
 });
 
